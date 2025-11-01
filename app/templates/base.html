@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}Password-less Chat{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" role="banner">
+        <div class="container header-inner">
+            <div class="brand"><a href="{{ url_for('main.index') }}">Password-less</a></div>
+            <nav aria-label="Primary" class="nav-links">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('chat.chat') }}" {% if request.endpoint == 'chat.chat' %}aria-current="page"{% endif %}>Chat</a>
+                    {% if current_user.is_admin %}
+                        <a href="{{ url_for('admin.users') }}" {% if 'admin' in request.endpoint %}aria-current="page"{% endif %}>Admin</a>
+                    {% endif %}
+                    <form action="{{ url_for('auth.logout') }}" method="post" class="logout-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn-link">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                    <a href="{{ url_for('auth.register') }}">Register</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main id="main" class="container" role="main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container" role="status" aria-live="polite">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+        <div class="container">&copy; {{ config.SITE_NAME }} {{ current_year }}</div>
+    </footer>
+    <script type="module">
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+        window.appConfig = { csrfToken };
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

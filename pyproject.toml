@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "password_less_app"
+version = "0.1.0"
+description = "Password-less Flask chat app with local Ollama integration"
+authors = [{name = "Your Name"}]
+requires-python = ">=3.12"
+dependencies = [
+    "Flask>=3.0,<4.0",
+    "SQLAlchemy>=2.0,<3.0",
+    "Flask-Login>=0.6",
+    "Flask-WTF>=1.2",
+    "Flask-Migrate>=4.0",
+    "Flask-Limiter>=3.5",
+    "python-dotenv>=1.0",
+    "requests>=2.31",
+    "itsdangerous>=2.1",
+    "gunicorn>=21.2"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock>=3.12"
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests"
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]

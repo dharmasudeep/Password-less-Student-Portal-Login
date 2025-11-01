@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Page not found · Password-less{% endblock %}
+{% block content %}
+<section class="error-page" role="alert">
+    <h1>Something went wrong</h1>
+    <p>The page you requested could not be found. Try returning to the <a href="{{ url_for('main.index') }}">home page</a>.</p>
+</section>
+{% endblock %}
